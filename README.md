@@ -1,6 +1,6 @@
 # Vapor Leaf Language Support for Xcode
 
-This adds Vapor Leaf language support to Xcode IDE via a Xcode plugin and support files providing syntax highlighting for Vapor Leaf tags and HTML tags with auto-indentation that works in tandem for both.  
+This adds Vapor Leaf language support to Xcode IDE via Xcode plugin and support files providing syntax highlighting for Vapor Leaf tags and HTML tags with auto-indentation that works in tandem for both.  
 
 <img src="Images/Xcode-code-highlight.png">
 
