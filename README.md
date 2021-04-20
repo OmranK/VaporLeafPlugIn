@@ -9,6 +9,7 @@ This adds Vapor Leaf language support to Xcode IDE via a Xcode plugin and langua
 Use my previous [solution](https://github.com/OmranK/LeafSyntaxHighlighter) to add custom file icons for .leaf files.
 
 <img src="Images/Xcode-file-icon.png"> &nbsp;
+
 <img src="Images/Finder-icon.png">
 
 
