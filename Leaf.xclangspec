@@ -2,7 +2,7 @@
 // Leaf
 
 (
-// MARK: - Leaf Syntax Coloring
+    // MARK: - Leaf Syntax Coloring
     
     {
         Identifier = "xcode.lang.leaf";
@@ -59,7 +59,7 @@
         };
     },
     
-// MARK: - Strings and Characters
+    // MARK: - Strings and Characters
     
     // HTML Strings and Characters
     {
@@ -70,7 +70,6 @@
             ParseEndBeforeIncludedRules = NO;
             IncludeRules = ( "xcode.lang.url", "xcode.lang.url.mail",
                 "xcode.lang.leaf.string.inline.if.tag",
-                // "xcode.lang.leaf.string.inline.tag",
                 "xcode.lang.leaf.tag.identifiers",
             );
             Type = "xcode.syntax.string";
@@ -144,6 +143,15 @@
         };
     },
     {
+        Identifier = "xcode.lang.leaf.plain.word";
+        Syntax = {
+            CaseSensitive = NO;
+            StartChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_";
+            Type = "xcode.syntax.identifier.macro";
+        };
+    },
+    {
         Identifier = "xcode.lang.leaf.tag.identifiers";
         Syntax = {
             Words = (
@@ -186,9 +194,20 @@
         };
     },
     {
+        Identifier = "xcode.lang.leaf.inline.tag.identifiers";
+        Syntax = {
+            Words = (
+                "if",
+                "endif",
+            );
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+
+    {
         Identifier = "xcode.lang.leaf.tag.command";
         Syntax = {
-            Words = ( "#", );
+            Words = ( "#",);
             Type = "xcode.syntax.identifier.variable";
         };
     },
@@ -196,8 +215,8 @@
         Identifier = "xcode.lang.leaf.symbols";
         Syntax = {
             Words = (
-                "(", ")",
-                ",", ".", ":", "==", "!=", "<", "<=", ">", ">=" );
+                "(", ")", ":", "=",
+                ",", ".", "==", "!=", "<", "<=", ">", ">=" );
             Type = "xcode.syntax.plain";
         };
     },
@@ -211,7 +230,7 @@
     },
     
     
-// MARK: - Comments
+    // MARK: - Comments
     {
         Identifier = "xcode.lang.leaf.comment";
         Syntax = {
@@ -224,7 +243,7 @@
     },
     
     
-// MARK: - HTML Entities
+    // MARK: - HTML Entities
     {
         Identifier = "xcode.lang.leaf.entity.end";
         Syntax = {
@@ -254,6 +273,10 @@
                 "script" = "xcode.lang.leaf.entity.script.start";
                 "style" = "xcode.lang.leaf.entity.style.start";
             };
+            IncludeRules = (
+                "xcode.lang.leaf.tag",
+                "xcode.lang.leaf.inline.tag.block",
+            );
         };
     },
     
@@ -261,6 +284,8 @@
         Identifier = "xcode.lang.leaf.entity.lexer";
         Syntax = {
             IncludeRules = (
+                "xcode.lang.leaf.tag.command",
+                "xcode.lang.leaf.inline.tag.identifiers",
                 "xcode.lang.leaf.word",
                 "xcode.lang.leaf.string",
                 "xcode.lang.leaf.string.singlequote",
@@ -272,7 +297,7 @@
         Syntax = {
             Start = "<!";
             End = ">";
-            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote", );
+            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote" );
             Type = "xcode.syntax.keyword";
         };
     },
@@ -281,7 +306,7 @@
         Syntax = {
             Start = "<?";
             End = "?>";
-            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote", );
+            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote" );
             Type = "xcode.syntax.keyword";
         };
     },
@@ -347,7 +372,25 @@
         };
     },
     
-// MARK: - Leaf Tag Block
+    // HTML Inline Leaf Tag Block
+    {
+        Identifier = "xcode.lang.leaf.inline.tag.block";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.lexer";
+            Start = ":";
+            Until = "#end";
+            Recursive = YES;
+            Foldable = YES;
+            IncludeRules = (
+                "xcode.lang.leaf.symbols",
+                "xcode.lang.leaf.plain.word",
+                "xcode.lang.leaf.tag",
+                "xcode.lang.leaf.inline.tag.parameter.string"
+            );
+        };
+    },
+    
+    // MARK: - Leaf Tag Block
     {
         Identifier = "xcode.lang.leaf.tag.block";
         Syntax = {
@@ -368,7 +411,7 @@
         };
     },
     
-// MARK: - Leaf General / Custom Tags
+    // MARK: - Leaf General / Custom Tags
     {
         Identifier = "xcode.lang.leaf.tag";
         Syntax = {
@@ -390,6 +433,9 @@
             Start = "(";
             Until = ")";
             Type = "xcode.syntax.identifier.variable.system";
+            IncludeRules = (
+                "xcode.lang.leaf.in.keyword",
+            );
         };
     },
     {
@@ -402,7 +448,7 @@
         };
     },
     
-// MARK: - Leaf Tag Lexer
+    // MARK: - Leaf Tag Lexer
     {
         Identifier = "xcode.lang.leaf.tag.lexer";
         Syntax = {
@@ -410,7 +456,6 @@
                 // leaf types
                 "xcode.lang.leaf.tag.command",
                 "xcode.lang.leaf.tag.identifiers",
-                "xcode.lang.leaf.in.keyword",
                 "xcode.lang.leaf.symbols",
                 "xcode.lang.leaf.tag.parameter.string",
                 
@@ -420,37 +465,20 @@
         };
     },
     
-// MARK: - Leaf String Inline Tags
+    // MARK: - HTML Tag String Inline Tags
     {
         Identifier = "xcode.lang.leaf.string.inline.if.tag";
         Syntax = {
-            Tokenizer = "xcode.lang.leaf.inline.tag.lexer";
+            Tokenizer = "xcode.lang.leaf.inline.string.tag.lexer";
             SourceScannerClassName = "leafTagScanner";
             Start = "#if";
             Until = "#endif";
             IncludeRules = (
                 "xcode.lang.leaf.string.inline.tag.parameters",
-                "xcode.lang.leaf.plain.word",
             );
-            Type = "xcode.syntax.identifier.variable";
+            Type = "xcode.syntax.identifier.macro";
         };
     },
-    
-    // Uncomment to add Leaf tag highlighting inside html tag strings but will cause errors.
-//    {
-//        Identifier = "xcode.lang.leaf.string.inline.tag";
-//        Syntax = {
-//            Tokenizer = "xcode.lang.leaf.inline.tag.lexer";
-//            SourceScannerClassName = "leafTagScanner";
-//            Start = "#";
-//            End = ")";
-//            IncludeRules = (
-//                "xcode.lang.leaf.symbols",
-//                "xcode.lang.leaf.string.inline.tag.parameters",
-//            );
-//            Type = "xcode.syntax.identifier.variable";
-//        };
-//    },
     {
         Identifier = "xcode.lang.leaf.string.inline.tag.parameters";
         Syntax = {
@@ -458,6 +486,7 @@
             Until = ")";
             IncludeRules = (
                 "xcode.lang.leaf.inline.tag.parameter.string",
+                "xcode.lang.leaf.symbols",
             );
             Type = "xcode.syntax.identifier.variable.system";
         };
@@ -468,20 +497,23 @@
             Start = "\"";
             End = "\"";
             ParseEndBeforeIncludedRules = NO;
+            IncludeRules = (
+                "xcode.lang.leaf.symbols",
+                "xcode.lang.leaf.tag",
+            );
             Type = "xcode.syntax.string";
         };
     },
     
-    //  Leaf Inline Tag Lexer
+    //  HTML Tag String Inline Tag Lexer
     {
-        Identifier = "xcode.lang.leaf.inline.tag.lexer";
+        Identifier = "xcode.lang.leaf.inline.string.tag.lexer";
         Syntax = {
             IncludeRules = (
                 // leaf types
                 "xcode.lang.leaf.tag.identifiers",
-                "xcode.lang.leaf.in.keyword",
                 "xcode.lang.leaf.symbols",
-                "xcode.lang.leaf.inline.tag.parameter.string",
+                "xcode.lang.leaf.command",
                 
                 // built-in types
                 "xcode.lang.number",
