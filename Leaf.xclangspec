@@ -1,0 +1,541 @@
+
+// Leaf
+
+(
+// MARK: - Leaf Syntax Coloring
+    
+    {
+        Identifier = "xcode.lang.leaf";
+        Description = "leaf Coloring";
+        BasedOn = "xcode.lang.simpleColoring";
+        IncludeInMenu = YES;
+        Name = "leaf";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.lexer";
+            IncludeRules = (
+                // HTML Rules
+                "xcode.lang.php.inxml",
+                "xcode.lang.php.inxml2",
+                "xcode.lang.ruby.inxml",
+                "xcode.lang.ruby.inxml2",
+                "xcode.lang.leaf.processing",
+                "xcode.lang.leaf.entity.element",
+                "xcode.lang.leaf.entity.script",
+                "xcode.lang.leaf.entity.style",
+                "xcode.lang.leaf.entity.block",
+                
+                // Leaf Rules
+                "xcode.lang.leaf.tag.parameters",
+                "xcode.lang.leaf.tag.block",
+                "xcode.lang.leaf.extension.tag",
+                "xcode.lang.leaf.export.tag",
+                "xcode.lang.leaf.import.tag",
+                "xcode.lang.leaf.tag",
+            );
+            Type = "xcode.syntax.plain";
+        };
+    },
+    
+    // Main Lexer
+    {
+        Identifier = "xcode.lang.leaf.lexer";
+        Syntax = {
+            IncludeRules = (
+                // HTML types
+                "xcode.lang.leaf.comment",
+                "xcode.lang.leaf.interestingOperators",
+                "xcode.lang.leaf.entity.end",
+                "xcode.lang.leaf.entity.start",
+                "xcode.lang.leaf.character",
+                
+                // Leaf types
+                "xcode.lang.leaf.tag.command",
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.symbols",
+                
+                // Built-in types
+                "xcode.lang.number",
+            );
+        };
+    },
+    
+// MARK: - Strings and Characters
+    
+    // HTML Strings and Characters
+    {
+        Identifier = "xcode.lang.leaf.string";
+        Syntax = {
+            Start = "\"";
+            End = "\"";
+            ParseEndBeforeIncludedRules = NO;
+            IncludeRules = ( "xcode.lang.url", "xcode.lang.url.mail",
+                "xcode.lang.leaf.string.inline.if.tag",
+                // "xcode.lang.leaf.string.inline.tag",
+                "xcode.lang.leaf.tag.identifiers",
+            );
+            Type = "xcode.syntax.string";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.string.singlequote";
+        Syntax = {
+            Start = "'";
+            End = "'";
+            ParseEndBeforeIncludedRules = YES;
+            IncludeRules = ( "xcode.lang.url", "xcode.lang.url.mail");
+            Type = "xcode.syntax.string";
+        };
+    },
+    
+    {
+        Identifier = "xcode.lang.leaf.character";
+        Syntax = {
+            StartChars = "&";
+            Match = (
+                "&#?[0-9a-zA-z]+;",
+            );
+            Type = "xcode.syntax.character";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.word";
+        Syntax = {
+            CaseSensitive = NO;
+            StartChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_";
+            Type = "xcode.syntax.identifier";    // converted to keywords or attributes internally
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.plain.word";
+        Syntax = {
+            CaseSensitive = NO;
+            StartChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_";
+            Type = "xcode.syntax.plain";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.interestingOperators";
+        Syntax = {
+            Words = (
+                "<?php",
+                "<?PHP",
+                "<?",
+                "?>",
+                "<%%",
+                "<%",
+                "%>",
+                "<!",
+            );
+            Type = "xcode.syntax.keyword";
+            WordBreak = NO;
+        };
+    },
+    
+    // Leaf Strings and Characters
+    {
+        Identifier = "xcode.lang.leaf.template.name.string";
+        Syntax = {
+            Start = "\"";
+            End = "\"";
+            ParseEndBeforeIncludedRules = YES;
+            Type = "xcode.syntax.identifier.macro";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.tag.identifiers";
+        Syntax = {
+            Words = (
+                "if",
+                "else",
+                "elseif",
+                "endif",
+                "for",
+                "endfor",
+                "extend",
+                "endextend",
+                "export",
+                "endexport",
+                "import",
+                "count",
+                "lowercased",
+                "uppercased",
+                "capitalized",
+                "contains",
+                "date",
+                "#if",
+                "#else",
+                "#elseif",
+                "#endif",
+                "#for",
+                "#endfor",
+                "#extend",
+                "#endextend",
+                "#export",
+                "#endexport",
+                "#import",
+                "#count",
+                "#lowercased",
+                "#uppercased",
+                "#capitalized",
+                "#contains",
+                "#date",
+            );
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.tag.command";
+        Syntax = {
+            Words = ( "#", );
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.symbols";
+        Syntax = {
+            Words = (
+                "(", ")",
+                ",", ".", ":", "==", "!=", "<", "<=", ">", ">=" );
+            Type = "xcode.syntax.plain";
+        };
+    },
+    
+    {
+        Identifier = "xcode.lang.leaf.in.keyword";
+        Syntax = {
+            Words = ( "in", );
+            Type = "xcode.syntax.keyword";
+        };
+    },
+    
+    
+// MARK: - Comments
+    {
+        Identifier = "xcode.lang.leaf.comment";
+        Syntax = {
+            Start = "<!--";
+            End = "-->";
+            Foldable = YES;
+            IncludeRules = ( "xcode.lang.url", "xcode.lang.url.mail" );
+            Type = "xcode.syntax.comment";
+        };
+    },
+    
+    
+// MARK: - HTML Entities
+    {
+        Identifier = "xcode.lang.leaf.entity.end";
+        Syntax = {
+            Start = "</";
+            End = ">";
+            Type = "xcode.syntax.entity";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.entity.start";
+        Syntax = {
+            SourceScannerClassName = "leafEntityScanner";
+            Tokenizer = "xcode.lang.leaf.entity.lexer";
+            Start = "<";
+            End = ">";
+            AltEnd = "/>";
+            Type = "xcode.syntax.entity.start";
+            AltType = "xcode.syntax.entity";
+            AltToken = "xcode.lang.leaf.entity.standalone";
+            
+            // this dictionary maps an entity name to a token for the whole node. And yes, to us all scripts are JavaScript and all style sheets are CSS.
+            // also listed are entities that are often left unclosed (by ignoring them, we won't let you fold the blocks. But that's life.)
+            EntityNameMap = {
+                "p" = "xcode.lang.leaf.entity.ignore";
+                "br" = "xcode.lang.leaf.entity.ignore";
+                "hr" = "xcode.lang.leaf.entity.ignore";
+                "script" = "xcode.lang.leaf.entity.script.start";
+                "style" = "xcode.lang.leaf.entity.style.start";
+            };
+        };
+    },
+    
+    {
+        Identifier = "xcode.lang.leaf.entity.lexer";
+        Syntax = {
+            IncludeRules = (
+                "xcode.lang.leaf.word",
+                "xcode.lang.leaf.string",
+                "xcode.lang.leaf.string.singlequote",
+            );
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.entity.element";
+        Syntax = {
+            Start = "<!";
+            End = ">";
+            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote", );
+            Type = "xcode.syntax.keyword";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.processing";
+        Syntax = {
+            Start = "<?";
+            End = "?>";
+            IncludeRules = ( "xcode.lang.leaf.character", "xcode.lang.leaf.string", "xcode.lang.leaf.string.singlequote", );
+            Type = "xcode.syntax.keyword";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.entity.block";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.lexer";
+            SourceScannerClassName = "leafScanner";
+            Start = "xcode.lang.leaf.entity.start";
+            End = "xcode.lang.leaf.entity.end";
+            Recursive = YES;
+            Foldable = YES;
+            Type = "xcode.syntax.definition.function";
+            IncludeRules = (
+                // HTML Rules
+                "xcode.lang.php.inxml",
+                "xcode.lang.php.inxml2",
+                "xcode.lang.ruby.inxml",
+                "xcode.lang.ruby.inxml2",
+                "xcode.lang.leaf.processing",
+                "xcode.lang.leaf.entity.element",
+                "xcode.lang.leaf.entity.script",
+                "xcode.lang.leaf.entity.style",
+                
+                // Leaf Rules
+                
+                "xcode.lang.leaf.tag.parameters",
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.extension.tag",
+                "xcode.lang.leaf.export.tag",
+                "xcode.lang.leaf.import.tag",
+                "xcode.lang.leaf.tag",
+                "xcode.lang.leaf.tag.block",
+            );
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.entity.script";
+        Syntax = {
+            Start = "xcode.lang.leaf.entity.script.start";
+            End = "</script>";
+            CaseSensitive = NO;
+            ParseEndBeforeIncludedRules = YES;
+            Foldable = YES;
+            IncludeRules = (
+                "xcode.lang.javascript",
+            );
+            Type = "xcode.syntax.keyword";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.entity.style";
+        Syntax = {
+            Start = "xcode.lang.leaf.entity.style.start";
+            End = "</style>";
+            CaseSensitive = NO;
+            ParseEndBeforeIncludedRules = YES;
+            Foldable = YES;
+            IncludeRules = (
+                "xcode.lang.css",
+            );
+            Type = "xcode.syntax.keyword";
+        };
+    },
+    
+// MARK: - Leaf Tag Block
+    {
+        Identifier = "xcode.lang.leaf.tag.block";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.lexer";
+            Start = ":";
+            Until = "#elseif|#else:|#end";
+            Recursive = YES;
+            Foldable = YES;
+            IncludeRules = (
+                "xcode.lang.leaf.tag.parameters",
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.extension.tag",
+                "xcode.lang.leaf.export.tag",
+                "xcode.lang.leaf.import.tag",
+                "xcode.lang.leaf.entity.block",
+                "xcode.lang.leaf.tag",
+            );
+        };
+    },
+    
+// MARK: - Leaf General / Custom Tags
+    {
+        Identifier = "xcode.lang.leaf.tag";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.tag.lexer";
+            SourceScannerClassName = "leafTagScanner";
+            Start = "#";
+            Until = ")|\n";
+            IncludeRules = (
+                "xcode.lang.leaf.tag.parameters"
+            );
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.tag.parameters";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.tag.lexer";
+            SourceScannerClassName = "leafTagScanner";
+            Start = "(";
+            Until = ")";
+            Type = "xcode.syntax.identifier.variable.system";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.tag.parameter.string";
+        Syntax = {
+            Start = "\"";
+            End = "\"";
+            ParseEndBeforeIncludedRules = NO;
+            Type = "xcode.syntax.string";
+        };
+    },
+    
+// MARK: - Leaf Tag Lexer
+    {
+        Identifier = "xcode.lang.leaf.tag.lexer";
+        Syntax = {
+            IncludeRules = (
+                // leaf types
+                "xcode.lang.leaf.tag.command",
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.in.keyword",
+                "xcode.lang.leaf.symbols",
+                "xcode.lang.leaf.tag.parameter.string",
+                
+                // built-in types
+                "xcode.lang.number",
+            );
+        };
+    },
+    
+// MARK: - Leaf String Inline Tags
+    {
+        Identifier = "xcode.lang.leaf.string.inline.if.tag";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.inline.tag.lexer";
+            SourceScannerClassName = "leafTagScanner";
+            Start = "#if";
+            Until = "#endif";
+            IncludeRules = (
+                "xcode.lang.leaf.string.inline.tag.parameters",
+                "xcode.lang.leaf.plain.word",
+            );
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    
+    // Uncomment to add Leaf tag highlighting inside html tag strings but will cause errors.
+//    {
+//        Identifier = "xcode.lang.leaf.string.inline.tag";
+//        Syntax = {
+//            Tokenizer = "xcode.lang.leaf.inline.tag.lexer";
+//            SourceScannerClassName = "leafTagScanner";
+//            Start = "#";
+//            End = ")";
+//            IncludeRules = (
+//                "xcode.lang.leaf.symbols",
+//                "xcode.lang.leaf.string.inline.tag.parameters",
+//            );
+//            Type = "xcode.syntax.identifier.variable";
+//        };
+//    },
+    {
+        Identifier = "xcode.lang.leaf.string.inline.tag.parameters";
+        Syntax = {
+            Start = "(";
+            Until = ")";
+            IncludeRules = (
+                "xcode.lang.leaf.inline.tag.parameter.string",
+            );
+            Type = "xcode.syntax.identifier.variable.system";
+        };
+    },
+    {
+        Identifier = "xcode.lang.leaf.inline.tag.parameter.string";
+        Syntax = {
+            Start = "\"";
+            End = "\"";
+            ParseEndBeforeIncludedRules = NO;
+            Type = "xcode.syntax.string";
+        };
+    },
+    
+    //  Leaf Inline Tag Lexer
+    {
+        Identifier = "xcode.lang.leaf.inline.tag.lexer";
+        Syntax = {
+            IncludeRules = (
+                // leaf types
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.in.keyword",
+                "xcode.lang.leaf.symbols",
+                "xcode.lang.leaf.inline.tag.parameter.string",
+                
+                // built-in types
+                "xcode.lang.number",
+            );
+        };
+    },
+    
+    // MARK: - Leaf Template Extension Tags
+    {
+        Identifier = "xcode.lang.leaf.extension.tag";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.template.extension.lexer";
+            SourceScannerClassName = "leafExtensionScanner";
+            Start = "#extend";
+            End = ")";
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    
+    {
+        Identifier = "xcode.lang.leaf.import.tag";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.template.extension.lexer";
+            SourceScannerClassName = "leafExtensionScanner";
+            Start = "#import";
+            End = ")";
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    
+    {
+        Identifier = "xcode.lang.leaf.export.tag";
+        Syntax = {
+            Tokenizer = "xcode.lang.leaf.template.extension.lexer";
+            SourceScannerClassName = "leafExtensionScanner";
+            Start = "#export";
+            End = ")";
+            Type = "xcode.syntax.identifier.variable";
+        };
+    },
+    
+    // Leaf Template Extension Tag Lexer
+    {
+        Identifier = "xcode.lang.leaf.template.extension.lexer";
+        Syntax = {
+            IncludeRules = (
+                // leaf types
+                "xcode.lang.leaf.tag.command",
+                "xcode.lang.leaf.tag.identifiers",
+                "xcode.lang.leaf.symbols",
+                "xcode.lang.leaf.template.name.string",
+            );
+        };
+    },
+    
+    
+)
