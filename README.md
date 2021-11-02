@@ -15,7 +15,7 @@ Use my previous [solution](https://github.com/OmranK/LeafSyntaxHighlighter) to a
 
 ## Supported Xcode Versions
 
-This version works with Xcode 12.5. With future verisons, the plugin's Info.plist needs to be updated to include the new DVTPlugInCompatibilityUUID in the Info.plist of the new Xcode version.
+This version works with Xcode 13.1. With future verisons, the plugin's Info.plist needs to be updated to include the new DVTPlugInCompatibilityUUID in the Info.plist of the new Xcode version.
 
 ## Script Install
 
